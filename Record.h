@@ -6,10 +6,13 @@
 #define CSCI3110_RECORD_H
 
 #include <string>
+#include <fstream>
+#include <sstream>
 
 struct Record
 {
 public:
+    void readDataset(std::ifstream& file);
 
 private:
 // ,
