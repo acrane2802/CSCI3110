@@ -10,5 +10,6 @@ struct Record
 public:
 
 private:
+
 };
 #endif //CSCI3110_RECORD_H
