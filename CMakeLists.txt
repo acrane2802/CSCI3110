@@ -7,3 +7,7 @@ set(CMAKE_CXX_STANDARD 17)
 add_executable(CSCI3110 "main.cpp"
         "Record.cpp"
         "Record.h")
+
+add_custom_command(TARGET CSCI3110 PRE_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy
+        ${CMAKE_SOURCE_DIR}/dataset.csv $<TARGET_FILE_DIR:CSCI3110>/)
