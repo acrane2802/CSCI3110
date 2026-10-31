@@ -8,11 +8,12 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <vector>
 
 struct Record
 {
 public:
-    void readDataset(std::ifstream& file);
+    void readRecord(std::ifstream& file);
 
 private:
 // ,

@@ -4,13 +4,21 @@
 
 #include "Record.h"
 
-void Record::readDataset(std::ifstream &file)
+void Record::readRecord(std::ifstream &file)
 {
-    std::string t;
-    std::istringstream stringStream;
     std::string line;
     while (std::getline(file, line))
     {
-        std::getline(stringStream, , ',');
+        std::istringstream stringStream(line);
+
+        std::vector<std::string> substrings;
+        std::string substring;
+
+        while (std::getline(stringStream, substring, ','))
+        {
+            substrings.push_back(substring);
+        }
+
+        // store record data in variables from substring vector
     }
 }
