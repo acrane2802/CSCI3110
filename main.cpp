@@ -5,9 +5,9 @@
 
 int main()
 {
-    int recordCountToRead = 100;
+    int recordCountToRead = 114000;
 
-    Record* datasetRecords[100];
+    Record* datasetRecords[114000];
 
     std::ifstream testFile;
     testFile.open("dataset.csv");
@@ -39,6 +39,8 @@ int main()
         ++datasetIndex;
     }
     testFile.close();
+
+    delete[] &datasetRecords;
 
     //std::cout << "Hello, World!" << std::endl;
     return 0;
