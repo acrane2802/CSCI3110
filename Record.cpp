@@ -13,9 +13,21 @@ void Record::readRecord(std::ifstream &file)
 
         std::vector<std::string> substrings;
         std::string substring;
+        std::string appendSubstring;
 
         while (std::getline(stringStream, substring, ','))
         {
+            if (substring.front() == '"'){
+                int endOfRecord = 0;
+                while (!endOfRecord){
+                    substring.append(',');
+                    std::getline(stringStream, appendSubstring, ',');
+                    substring.append(appendSubstring);
+                    if (substring.back() == '"'){
+                        endOfRecord = 1;
+                    }
+                }
+            }
             substrings.push_back(substring);
         }
 
