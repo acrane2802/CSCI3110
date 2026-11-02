@@ -14,8 +14,7 @@ void Record::readRecord(std::ifstream &file)
 
     int endOfRecord = 0;
 
-    while (std::getline(file, line))
-    {
+    std::getline(file, line);
         std::istringstream stringStream(line);
 
         while (std::getline(stringStream, substring, ','))
@@ -78,10 +77,9 @@ void Record::readRecord(std::ifstream &file)
         genre = substrings[20];
 
         substrings.clear();
-    }
 }
 
 void Record::printRecord()
 {
-
+    std::cout << number << "\n" << trackID << "\n" << artists << "\n" << albumName << "\n" << trackName << "\n" << popularity << "\n" << durationInMS << "\n" << isExplicit << "\n" << danceability << "\n" << energy << "\n" << key << "\n" << loudness << "\n" << mode << "\n" << speechiness << "\n" << acousticness << "\n" << instrumentalness << "\n" << liveliness << "\n" << valence << "\n" << tempo << "\n" << timeSignature << "\n" << genre;
 }
