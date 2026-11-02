@@ -80,3 +80,8 @@ void Record::readRecord(std::ifstream &file)
         substrings.clear();
     }
 }
+
+void Record::printRecord()
+{
+
+}

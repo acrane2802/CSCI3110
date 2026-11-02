@@ -15,6 +15,8 @@ struct Record
 public:
     void readRecord(std::ifstream& file);
 
+    void printRecord();
+
 private:
 // ,
 // track_id,artists,album_name,track_name,
