@@ -19,7 +19,7 @@ void Record::readRecord(std::ifstream &file)
 
     while (std::getline(stringStream, substring, ','))
     {
-        if (substring.front() == '"')
+        if (substring.front() == '"' && substring.back() != '"')
         {
             endOfRecord = 0;
 
