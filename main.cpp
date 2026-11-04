@@ -5,12 +5,12 @@
 
 int main()
 {
-    int recordCountToRead = 1;
+    int recordCountToRead = 16180;
 
-    Record* datasetRecords[1];
+    Record* datasetRecords[16180];
 
     std::ifstream testFile;
-    testFile.open("testrecords.csv");
+    testFile.open("dataset.csv");
 
     /*std::cout << "Record 1:\n";
     Record testRecord;
@@ -26,8 +26,8 @@ int main()
     testRecord.readRecord(testFile);
     testRecord.printRecord();*/
 
-    //std::string firstLine;
-    //std::getline(testFile, firstLine);
+    std::string firstLine;
+    std::getline(testFile, firstLine);
 
     int datasetIndex = 0;
 
@@ -38,9 +38,10 @@ int main()
         datasetRecords[datasetIndex]->dummyPrint();
         ++datasetIndex;
     }
+
     testFile.close();
 
-    delete[] &datasetRecords;
+    //delete[] &datasetRecords;
 
     //std::cout << "Hello, World!" << std::endl;
     return 0;

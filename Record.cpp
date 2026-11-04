@@ -83,33 +83,43 @@ void Record::dummyReadRecord(std::ifstream &file)
     std::string line;
     std::getline(file, line);
 
-    std::istringstream stringStream(line);
-
-    std::string substring;
-    char previousChar = ' ';
-    int quoteCount = 0;
-    bool finishedWithSubstring = false;
-
-    for (int curChar = 0; finishedWithSubstring == false && (curChar == stringStream.get()) != EOF;)
+    if (!line.empty() && line.back() == '\r')
     {
-        if (curChar == '"')
-        {
-            ++quoteCount;
-            break;
-        }
-        if (curChar == ',')
-        {
-            if (quoteCount == 0 || (previousChar == '"'  && (quoteCount % 2) == 0))
-            {
-                finishedWithSubstring = true;
-            }
-            break;
-        }
-        previousChar = static_cast<char>(curChar);
-        substring.append({previousChar});
+        line.pop_back();
     }
 
-    substrings.push_back(substring);
+    std::string record;
+    bool inQuotes = false;
+
+    for (size_t i = 0; i < line.size(); ++i)
+    {
+        char c = line[i];
+
+        if (c == '"')
+        {
+            record += '"';
+            if (inQuotes && i + 1 < line.size() && line[i + 1] == '"')
+            {
+                record += '"';
+                ++i;
+            }
+            else
+            {
+                inQuotes = !inQuotes;
+            }
+        }
+        else if (c == ',' && !inQuotes)
+        {
+            substrings.push_back(record);
+            record.clear();
+        }
+        else
+        {
+            record += c;
+        }
+    }
+
+    substrings.push_back(record);
 }
 
 void Record::dummyPrint()
