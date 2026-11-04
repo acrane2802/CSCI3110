@@ -16,6 +16,8 @@ struct Record
 public:
     void readRecord(std::ifstream& file);
 
+    void dummyReadRecord(std::ifstream& file);
+
     void printRecord();
 
 private:
@@ -66,5 +68,7 @@ private:
     float timeSignature {0.0f};
 
     std::string genre;
+
+    std::vector<std::string> substrings;
 };
 #endif //CSCI3110_RECORD_H

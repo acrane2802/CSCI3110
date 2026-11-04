@@ -8,7 +8,6 @@ void Record::readRecord(std::ifstream &file)
 {
     std::string line;
 
-    std::vector<std::string> substrings;
     std::string substring;
     std::string appendSubstring;
 
@@ -77,6 +76,40 @@ void Record::readRecord(std::ifstream &file)
     genre = substrings[20];
 
     substrings.clear();
+}
+
+void Record::dummyReadRecord(std::ifstream &file)
+{
+    std::string line;
+    std::getline(file, line);
+
+    std::istringstream stringStream(line);
+
+    std::string substring;
+    char previousChar = ' ';
+    int quoteCount = 0;
+    bool finishedWithSubstring = false;
+
+    for (int curChar = 0; finishedWithSubstring == false && (curChar == stringStream.get()) != EOF;)
+    {
+        if (curChar == '"')
+        {
+            ++quoteCount;
+            break;
+        }
+        if (curChar == ',')
+        {
+            if (quoteCount == 0 || (previousChar == '"'  && (quoteCount % 2) == 0))
+            {
+                finishedWithSubstring = true;
+            }
+            break;
+        }
+        previousChar = static_cast<char>(curChar);
+        substring.append({previousChar});
+    }
+
+    substrings.push_back(substring);
 }
 
 void Record::printRecord()
