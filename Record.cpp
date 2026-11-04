@@ -112,6 +112,14 @@ void Record::dummyReadRecord(std::ifstream &file)
     substrings.push_back(substring);
 }
 
+void Record::dummyPrint()
+{
+    for (std::string str : substrings)
+    {
+        std::cout << str << "\n";
+    }
+}
+
 void Record::printRecord()
 {
     std::cout << number << "\n"

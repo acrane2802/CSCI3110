@@ -18,6 +18,8 @@ public:
 
     void dummyReadRecord(std::ifstream& file);
 
+    void dummyPrint();
+
     void printRecord();
 
 private:
