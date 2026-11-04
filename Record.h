@@ -16,10 +16,6 @@ struct Record
 public:
     void readRecord(std::ifstream& file);
 
-    void dummyReadRecord(std::ifstream& file);
-
-    void dummyPrint();
-
     void printRecord();
 
 private:

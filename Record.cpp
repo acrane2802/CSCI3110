@@ -9,35 +9,46 @@ void Record::readRecord(std::ifstream &file)
     std::string line;
 
     std::string substring;
-    std::string appendSubstring;
-
-    int endOfRecord = 0;
 
     std::getline(file, line);
-    std::istringstream stringStream(line);
 
-    while (std::getline(stringStream, substring, ','))
+    if (!line.empty() && line.back() == '\r')
     {
-        if (substring.front() == '"' && substring.back() != '"')
+        line.pop_back();
+    }
+
+    std::string currentCSVColumn;
+    bool inQuotes = false;
+
+    for (size_t i = 0; i < line.size(); ++i)
+    {
+        char curChar = line[i];
+
+        if (curChar == '"')
         {
-            endOfRecord = 0;
-
-            while (!endOfRecord)
+            currentCSVColumn += '"';
+            if (inQuotes && i + 1 < line.size() && line[i + 1] == '"')
             {
-                substring.append({','});
-
-                std::getline(stringStream, appendSubstring, ',');
-
-                substring.append(appendSubstring);
-
-                if (substring.back() == '"')
-                {
-                    endOfRecord = 1;
-                }
+                currentCSVColumn += '"';
+                ++i;
+            }
+            else
+            {
+                inQuotes = !inQuotes;
             }
         }
-        substrings.push_back(substring);
+        else if (curChar == ',' && !inQuotes)
+        {
+            substrings.push_back(currentCSVColumn);
+            currentCSVColumn.clear();
+        }
+        else
+        {
+            currentCSVColumn += curChar;
+        }
     }
+
+    substrings.push_back(currentCSVColumn);
 
     number = stoi(substrings[0]);
 
@@ -76,58 +87,6 @@ void Record::readRecord(std::ifstream &file)
     genre = substrings[20];
 
     substrings.clear();
-}
-
-void Record::dummyReadRecord(std::ifstream &file)
-{
-    std::string line;
-    std::getline(file, line);
-
-    if (!line.empty() && line.back() == '\r')
-    {
-        line.pop_back();
-    }
-
-    std::string record;
-    bool inQuotes = false;
-
-    for (size_t i = 0; i < line.size(); ++i)
-    {
-        char c = line[i];
-
-        if (c == '"')
-        {
-            record += '"';
-            if (inQuotes && i + 1 < line.size() && line[i + 1] == '"')
-            {
-                record += '"';
-                ++i;
-            }
-            else
-            {
-                inQuotes = !inQuotes;
-            }
-        }
-        else if (c == ',' && !inQuotes)
-        {
-            substrings.push_back(record);
-            record.clear();
-        }
-        else
-        {
-            record += c;
-        }
-    }
-
-    substrings.push_back(record);
-}
-
-void Record::dummyPrint()
-{
-    for (std::string str : substrings)
-    {
-        std::cout << str << "\n";
-    }
 }
 
 void Record::printRecord()

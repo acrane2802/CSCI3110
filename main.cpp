@@ -20,8 +20,8 @@ int main()
     while (datasetIndex < recordCountToRead)
     {
         datasetRecords[datasetIndex] = new Record;
-        datasetRecords[datasetIndex]->dummyReadRecord(testFile);
-        datasetRecords[datasetIndex]->dummyPrint();
+        datasetRecords[datasetIndex]->readRecord(testFile);
+        datasetRecords[datasetIndex]->printRecord();
         ++datasetIndex;
     }
 

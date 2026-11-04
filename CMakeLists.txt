@@ -11,7 +11,3 @@ add_executable(CSCI3110 "main.cpp"
 add_custom_command(TARGET CSCI3110 PRE_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy
         ${CMAKE_SOURCE_DIR}/dataset.csv $<TARGET_FILE_DIR:CSCI3110>/)
-
-add_custom_command(TARGET CSCI3110 PRE_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy
-        ${CMAKE_SOURCE_DIR}/testrecords.csv $<TARGET_FILE_DIR:CSCI3110>/)
