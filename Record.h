@@ -18,6 +18,10 @@ public:
 
     void printRecord();
 
+    std::string getArtists() { return artists; }
+    std::string getAlbum() { return albumName; }
+    std::string getTrackName() { return trackName; }
+
 private:
 // ,
 // track_id,artists,album_name,track_name,
