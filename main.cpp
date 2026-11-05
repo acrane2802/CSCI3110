@@ -30,27 +30,40 @@ int main()
         datasetHashMap.insert(std::pair(rec->getTrackName(), rec));
         ++datasetIndex;
     }
+
+    datasetFile.close();
+
+    std::chrono::time_point<std::chrono::high_resolution_clock> finishedTime = std::chrono::high_resolution_clock::now();
+    processingTime = finishedTime - startTime;
+    double millisecondsToRun = processingTime.count();
+
+    std::cout << "Time Taken to Read Dataset (milliseconds): " << millisecondsToRun << std::endl;
+
     std::string searchTrack;
+
     std::cout << "\nMusic Search\n";
-    std::cout << "Enter Track name: \n";
+    std::cout << "Enter Track name: ";
+
     std::getline(std::cin, searchTrack);
+
+    startTime = std::chrono::high_resolution_clock::now();
+
     auto result = datasetHashMap.find(searchTrack);
-    if (result != datasetHashMap.end()){
-        std::cout << "Track found: \n";
+    if (result != datasetHashMap.end())
+    {
+        std::cout << "Track data found: \n";
         datasetHashMap.at(searchTrack)->printRecord();
-    } else {
+    }
+    else
+    {
         std::cout << "Track not found.\n";
     }
 
-    std::chrono::time_point<std::chrono::high_resolution_clock> finishedTime = std::chrono::high_resolution_clock::now();
-
+    finishedTime = std::chrono::high_resolution_clock::now();
     processingTime = finishedTime - startTime;
+    millisecondsToRun = processingTime.count();
 
-    double millisecondsToRun = processingTime.count();
-
-    std::cout << "Final Run Time (milliseconds): " << millisecondsToRun << std::endl;
-
-    datasetFile.close();
+    std::cout << "Time Taken to Find Track (milliseconds): " << millisecondsToRun << std::endl;
 
     return 0;
 }
