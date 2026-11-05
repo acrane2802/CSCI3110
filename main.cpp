@@ -2,6 +2,7 @@
 #include <fstream>
 #include <chrono>
 #include <unordered_map>
+#include <memory>
 
 #include "Record.h"
 
@@ -9,7 +10,7 @@ constexpr int recordCountToRead = 114000;
 
 int main()
 {
-    std::unordered_map<Record*, std::string> datasetHashMap;
+    std::unordered_map<std::string, Record*> datasetHashMap;
 
     std::ifstream datasetFile;
     datasetFile.open("dataset.csv");
@@ -26,7 +27,7 @@ int main()
     {
         Record* rec = new Record;
         rec->readRecord(datasetFile);
-        datasetHashMap.insert(std::pair(rec, rec->getTrackName()));
+        datasetHashMap.insert(std::pair(rec->getTrackName(), rec));
         ++datasetIndex;
     }
 
@@ -36,7 +37,7 @@ int main()
 
     double millisecondsToRun = processingTime.count();
 
-    std::cout << "\n\n" << millisecondsToRun << std::endl;
+    std::cout << "Final Run Time (milliseconds): " << millisecondsToRun << std::endl;
 
     datasetFile.close();
 
