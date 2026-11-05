@@ -31,6 +31,8 @@ int main()
         ++datasetIndex;
     }
 
+    datasetHashMap.at("Experience")->getTrackName();
+
     std::chrono::time_point<std::chrono::high_resolution_clock> finishedTime = std::chrono::high_resolution_clock::now();
 
     processingTime = finishedTime - startTime;
