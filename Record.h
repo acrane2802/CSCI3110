@@ -22,6 +22,7 @@ public:
     std::string getAlbum() { return albumName; }
     std::string getTrackName() { return trackName; }
 
+    Record* getSelfPointer() { return this; }
 private:
 // ,
 // track_id,artists,album_name,track_name,

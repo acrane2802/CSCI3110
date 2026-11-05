@@ -27,7 +27,8 @@ int main()
     {
         Record* rec = new Record;
         rec->readRecord(datasetFile);
-        datasetHashMap.insert(std::pair(rec->getTrackName(), rec));
+        datasetHashMap.insert(std::pair(rec->getTrackName(), rec->getSelfPointer()));
+        //std::cout << rec->getSelfPointer() << std::endl;
         ++datasetIndex;
     }
 
@@ -45,14 +46,15 @@ int main()
     std::cout << "Enter Track name: ";
 
     std::getline(std::cin, searchTrack);
+    std::cout << "\n";
 
     startTime = std::chrono::high_resolution_clock::now();
 
     auto result = datasetHashMap.find(searchTrack);
     if (result != datasetHashMap.end())
     {
-        std::cout << "Track data found: \n";
-        datasetHashMap.at(searchTrack)->printRecord();
+        std::cout << "Track data found for query \"" << result->first << "\": \n";
+        result->second->printRecord();
     }
     else
     {
@@ -63,7 +65,7 @@ int main()
     processingTime = finishedTime - startTime;
     millisecondsToRun = processingTime.count();
 
-    std::cout << "Time Taken to Find Track (milliseconds): " << millisecondsToRun << std::endl;
+    std::cout << "\nTime Taken to Find Track (milliseconds): " << millisecondsToRun << std::endl;
 
     return 0;
 }
