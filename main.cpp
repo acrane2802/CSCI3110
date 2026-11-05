@@ -30,8 +30,17 @@ int main()
         datasetHashMap.insert(std::pair(rec->getTrackName(), rec));
         ++datasetIndex;
     }
-
-    datasetHashMap.at("Experience")->getTrackName();
+    std::string searchTrack;
+    std::cout << "\nMusic Search\n";
+    std::cout << "Enter Track name: \n";
+    std::getline(std::cin, searchTrack);
+    auto result = datasetHashMap.find(searchTrack);
+    if (result != datasetHashMap.end()){
+        std::cout << "Track found: \n";
+        datasetHashMap.at(searchTrack)->printRecord();
+    } else {
+        std::cout << "Track not found.\n";
+    }
 
     std::chrono::time_point<std::chrono::high_resolution_clock> finishedTime = std::chrono::high_resolution_clock::now();
 
