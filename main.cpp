@@ -32,7 +32,7 @@ int main()
         trackNameDatasetHashMap.insert(std::pair(rec->getTrackName(), rec->getSelfPointer()));
         albumNameDatasetHashMap.insert(std::pair(rec->getAlbum(), rec->getSelfPointer()));
         artistNameDatasetHashMap.insert(std::pair(rec->getArtists(), rec->getSelfPointer()));
-        //std::cout << rec->getSelfPointer() << std::endl;
+        // std::cout << rec->getSelfPointer() << std::endl;
         ++datasetIndex;
     }
 
@@ -72,6 +72,11 @@ int main()
                 startTime = std::chrono::high_resolution_clock::now();
 
                 result = trackNameDatasetHashMap.find(userQuery);
+
+                finishedTime = std::chrono::high_resolution_clock::now();
+                processingTime = finishedTime - startTime;
+                millisecondsToRun = processingTime.count();
+
                 if (result != trackNameDatasetHashMap.end())
                 {
                     std::cout << "Track data found for query \"" << result->first << "\": \n";
@@ -81,9 +86,6 @@ int main()
                 {
                     std::cout << "Track not found.\n";
                 }
-                finishedTime = std::chrono::high_resolution_clock::now();
-                processingTime = finishedTime - startTime;
-                millisecondsToRun = processingTime.count();
 
                 std::cout << "\nTime Taken to Find Track (milliseconds): " << millisecondsToRun << std::endl;
                 break;
@@ -91,45 +93,49 @@ int main()
                 startTime = std::chrono::high_resolution_clock::now();
 
                 result = albumNameDatasetHashMap.find(userQuery);
-                if (result != albumNameDatasetHashMap.end())
-                {
-                    std::cout << "Track data found for query \"" << result->first << "\": \n";
-                    result->second->printRecord();
-                }
-                else
-                {
-                    std::cout << "Track not found.\n";
-                }
+
                 finishedTime = std::chrono::high_resolution_clock::now();
                 processingTime = finishedTime - startTime;
                 millisecondsToRun = processingTime.count();
 
-                std::cout << "\nTime Taken to Find Track (milliseconds): " << millisecondsToRun << std::endl;
+                if (result != albumNameDatasetHashMap.end())
+                {
+                    std::cout << "Tracks under Album found for query \"" << result->first << "\": \n";
+                    result->second->printRecord();
+                }
+                else
+                {
+                    std::cout << "Album not found.\n";
+                }
+
+                std::cout << "\nTime Taken to Find Album (milliseconds): " << millisecondsToRun << std::endl;
                 break;
             case 3:
                 startTime = std::chrono::high_resolution_clock::now();
 
                 result = artistNameDatasetHashMap.find(userQuery);
-                if (result != artistNameDatasetHashMap.end())
-                {
-                    std::cout << "Track data found for query \"" << result->first << "\": \n";
-                    result->second->printRecord();
-                }
-                else
-                {
-                    std::cout << "Track not found.\n";
-                }
+
                 finishedTime = std::chrono::high_resolution_clock::now();
                 processingTime = finishedTime - startTime;
                 millisecondsToRun = processingTime.count();
 
-                std::cout << "\nTime Taken to Find Track (milliseconds): " << millisecondsToRun << std::endl;
+                if (result != artistNameDatasetHashMap.end())
+                {
+                    std::cout << "Tracks under Artist found for query \"" << result->first << "\": \n";
+                    result->second->printRecord();
+                }
+                else
+                {
+                    std::cout << "Artist not found.\n";
+                }
+
+                std::cout << "\nTime Taken to Find Artist (milliseconds): " << millisecondsToRun << std::endl;
                 break;
             default:
                 std::cout << "Invalid choice! Exiting...\n" << std::endl;
+                exit(-1);
                 break;
         }
-
     }
 
     return 0;

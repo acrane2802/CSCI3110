@@ -91,13 +91,5 @@ void Record::readRecord(std::ifstream &file)
 
 void Record::printRecord()
 {
-    std::cout << number << "\n"
-              << trackID << "\n" << artists << "\n" << albumName << "\n" << trackName << "\n"
-              << popularity << "\n" << durationInMS << "\n"
-              << isExplicit << "\n"
-              << danceability << "\n" << energy << "\n" << key << "\n"
-              << loudness << "\n" << mode << "\n" << speechiness << "\n" << acousticness << "\n" << instrumentalness << "\n" << liveliness << "\n"
-              << valence << "\n"
-              << tempo << "\n" << timeSignature << "\n"
-              << genre << "\n";
+    std::cout << "Artist(s): " << artists << "\n" << "Album Name: " << albumName << "\n" << "Track Name: " << trackName << "\n";
 }
