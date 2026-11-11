@@ -21,8 +21,14 @@ public:
     std::string getArtists() { return artists; }
     std::string getAlbum() { return albumName; }
     std::string getTrackName() { return trackName; }
-
+    int getPopularityScore() { return popularity; }
     Record* getSelfPointer() { return this; }
+
+    void setArtists(const std::string& title);
+    void setAlbum(const std::string& title);
+    void setTrackName(const std::string& title);
+    void setPopularityScore(const int& score);
+
 private:
 // ,
 // track_id,artists,album_name,track_name,

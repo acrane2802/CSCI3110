@@ -93,3 +93,23 @@ void Record::printRecord()
 {
     std::cout << "Artist(s): " << artists << "\n" << "Album Name: " << albumName << "\n" << "Track Name: " << trackName << "\n";
 }
+
+void Record::setArtists(const std::string& title)
+{
+    this->artists = title;
+}
+
+void Record::setAlbum(const std::string& title)
+{
+    this->albumName = title;
+}
+
+void Record::setTrackName(const std::string& title)
+{
+    this->trackName = title;
+}
+
+void Record::setPopularityScore(const int& score)
+{
+    this->popularity = score;
+}
