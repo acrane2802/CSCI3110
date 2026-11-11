@@ -32,7 +32,6 @@ int main()
         trackNameDatasetHashMap.insert(std::pair(rec->getTrackName(), rec->getSelfPointer()));
         albumNameDatasetHashMap.insert(std::pair(rec->getAlbum(), rec->getSelfPointer()));
         artistNameDatasetHashMap.insert(std::pair(rec->getArtists(), rec->getSelfPointer()));
-        // std::cout << rec->getSelfPointer() << std::endl;
         ++datasetIndex;
     }
 

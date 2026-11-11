@@ -1,7 +1,3 @@
-//
-// Created by andre on 10/26/2026.
-//
-
 #include "Record.h"
 
 void Record::readRecord(std::ifstream &file)
@@ -50,15 +46,15 @@ void Record::readRecord(std::ifstream &file)
 
     substrings.push_back(currentCSVColumn);
 
-    number = stoi(substrings[0]);
+    /* number = stoi(substrings[0]);
 
-    trackID = substrings[1];
+    trackID = substrings[1]; */
     artists = substrings[2];
     albumName = substrings[3];
     trackName = substrings[4];
 
     popularity = stoi(substrings[5]);
-    durationInMS = stoi(substrings[6]);
+    /* durationInMS = stoi(substrings[6]);
 
     if (substrings[7] == "true")
     {
@@ -84,7 +80,7 @@ void Record::readRecord(std::ifstream &file)
     tempo = stof(substrings[18]);
     timeSignature = stof(substrings[19]);
 
-    genre = substrings[20];
+    genre = substrings[20]; */
 
     substrings.clear();
 }
