@@ -141,7 +141,7 @@ int main()
                 break;
             default:
                 std::cout << "Invalid choice! Exiting...\n" << std::endl;
-                exit(-1);
+                return 0;
                 break;
         }
     }
