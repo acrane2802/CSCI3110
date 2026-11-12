@@ -10,9 +10,9 @@ constexpr int recordCountToRead = 114000;
 
 int main()
 {
-    std::unordered_map<std::string, Record*> trackNameDatasetHashMap;
-    std::unordered_map<std::string, Record*> albumNameDatasetHashMap;
-    std::unordered_map<std::string, Record*> artistNameDatasetHashMap;
+    std::unordered_multimap<std::string, Record*> trackNameDatasetHashMap;
+    std::unordered_multimap<std::string, Record*> albumNameDatasetHashMap;
+    std::unordered_multimap<std::string, Record*> artistNameDatasetHashMap;
 
     std::ifstream datasetFile;
     datasetFile.open("dataset.csv");
@@ -55,7 +55,7 @@ int main()
 
         if (userChoice == 4)
         {
-            std::cout << "Exiting...\n" << std::endl;
+            std::cout << "Exiting..." << std::endl;
             break;
         }
 
@@ -64,22 +64,25 @@ int main()
         std::getline(std::cin, userQuery);
         std::cout << "\n";
 
-        auto result = trackNameDatasetHashMap.find("");
+        auto result = trackNameDatasetHashMap.equal_range("");
         switch (userChoice)
         {
             case 1:
                 startTime = std::chrono::high_resolution_clock::now();
 
-                result = trackNameDatasetHashMap.find(userQuery);
+                result = trackNameDatasetHashMap.equal_range(userQuery);
 
                 finishedTime = std::chrono::high_resolution_clock::now();
                 processingTime = finishedTime - startTime;
                 millisecondsToRun = processingTime.count();
 
-                if (result != trackNameDatasetHashMap.end())
+                if (result.first != trackNameDatasetHashMap.end())
                 {
-                    std::cout << "Track data found for query \"" << result->first << "\": \n";
-                    result->second->printRecord();
+                    for (auto it = result.first; it != result.second; ++it)
+                    {
+                        std::cout << "Tracks found for query \"" << it->first << "\": \n";
+                        it->second->printRecord();
+                    }
                 }
                 else
                 {
@@ -91,16 +94,19 @@ int main()
             case 2:
                 startTime = std::chrono::high_resolution_clock::now();
 
-                result = albumNameDatasetHashMap.find(userQuery);
+                result = albumNameDatasetHashMap.equal_range(userQuery);
 
                 finishedTime = std::chrono::high_resolution_clock::now();
                 processingTime = finishedTime - startTime;
                 millisecondsToRun = processingTime.count();
 
-                if (result != albumNameDatasetHashMap.end())
+                if (result.first != albumNameDatasetHashMap.end())
                 {
-                    std::cout << "Tracks under Album found for query \"" << result->first << "\": \n";
-                    result->second->printRecord();
+                    for (auto it = result.first; it != result.second; ++it)
+                    {
+                        std::cout << "Tracks under Album found for query \"" << it->first << "\": \n";
+                        it->second->printRecord();
+                    }
                 }
                 else
                 {
@@ -112,16 +118,19 @@ int main()
             case 3:
                 startTime = std::chrono::high_resolution_clock::now();
 
-                result = artistNameDatasetHashMap.find(userQuery);
+                result = artistNameDatasetHashMap.equal_range(userQuery);
 
                 finishedTime = std::chrono::high_resolution_clock::now();
                 processingTime = finishedTime - startTime;
                 millisecondsToRun = processingTime.count();
 
-                if (result != artistNameDatasetHashMap.end())
+                if (result.first != artistNameDatasetHashMap.end())
                 {
-                    std::cout << "Tracks under Artist found for query \"" << result->first << "\": \n";
-                    result->second->printRecord();
+                    for (auto it = result.first; it != result.second; ++it)
+                    {
+                        std::cout << "Tracks under Artist found for query \"" << it->first << "\": \n";
+                        it->second->printRecord();
+                    }
                 }
                 else
                 {
