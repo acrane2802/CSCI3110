@@ -45,12 +45,9 @@ int main()
 
     std::cout << "Time Taken to Read Dataset into Hashmap (milliseconds): " << millisecondsToRun << std::endl;
 
-    datasetFile.close();
-
 
 
     datasetFile.open("dataset.csv");
-
     std::getline(datasetFile, firstLine);
 
     datasetIndex = 0;
@@ -220,6 +217,7 @@ int main()
                 }
 
                 std::cout << "\nTime Taken to Find Artist (milliseconds): " << millisecondsToRun << std::endl;
+
 
 
                 std::cout << "\n\n\nVector Search:\n";
