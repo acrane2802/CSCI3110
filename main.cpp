@@ -73,8 +73,7 @@ int main()
 
     std::cout << "Time Taken to Read Dataset into Vector (milliseconds): " << millisecondsToRun << std::endl;
 
-    runEditMenu(trackNameDatasetHashMap, albumNameDatasetHashMap,
-            artistNameDatasetHashMap, datasetVector);
+    runEditMenu(trackNameDatasetHashMap, albumNameDatasetHashMap, artistNameDatasetHashMap, datasetVector);
 
 
     int userChoice = 0;
@@ -226,31 +225,31 @@ double vectorSearch(std::vector<Record*> &datasetVector, int userChoice, std::st
     switch (userChoice)
     {
         case 1:
-            for (int i = 0; i < recordCountToRead; ++i)
+            for (auto & i : datasetVector)
             {
-                if (datasetVector[i]->getTrackName() == userQuery)  //if the track name matches
+                if (i->getTrackName() == userQuery)  //if the track name matches
                 {
-                    datasetVector[i]->printRecord();
+                    i->printRecord();
                     found = true;
                 }
             }
             break;
         case 2:
-            for (int i = 0; i < recordCountToRead; ++i)
+            for (auto & i : datasetVector)
             {
-                if (datasetVector[i]->getAlbum() == userQuery)  //if the track name matches
+                if (i->getAlbum() == userQuery)  //if the track name matches
                 {
-                    datasetVector[i]->printRecord();
+                    i->printRecord();
                     found = true;
                 }
             }
             break;
         case 3:
-            for (int i = 0; i < recordCountToRead; ++i)
+            for (auto & i : datasetVector)
             {
-                if (datasetVector[i]->getArtists() == userQuery)  //if the track name matches
+                if (i->getArtists() == userQuery)  //if the track name matches
                 {
-                    datasetVector[i]->printRecord();
+                    i->printRecord();
                     found = true;
                 }
             }
