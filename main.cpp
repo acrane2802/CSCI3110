@@ -5,6 +5,7 @@
 #include <memory>
 
 #include "Record.h"
+#include "RecordOperations.h"
 
 constexpr int recordCountToRead = 114000;
 
@@ -72,6 +73,8 @@ int main()
 
     std::cout << "Time Taken to Read Dataset into Vector (milliseconds): " << millisecondsToRun << std::endl;
 
+    runEditMenu(trackNameDatasetHashMap, albumNameDatasetHashMap,
+            artistNameDatasetHashMap, datasetVector);
 
 
     int userChoice = 0;
