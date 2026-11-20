@@ -15,6 +15,9 @@ double vectorSearch(std::vector<Record*> &datasetVector, int userChoice, const s
 
 std::vector<Record*> top10;
 
+int searchResultCount = 0;
+int totalResult = 0;
+
 int main()
 {
     std::unordered_multimap<std::string, Record*> trackNameDatasetHashMap;
@@ -99,8 +102,7 @@ int main()
         std::getline(std::cin, userQuery);
         std::cout << "\n";
 
-        int searchResultCount = 0;
-        int totalResult = 0;
+
 
         auto result = trackNameDatasetHashMap.equal_range("");
         switch (userChoice)
@@ -301,30 +303,94 @@ double vectorSearch(std::vector<Record*> &datasetVector, int userChoice, const s
             {
                 if (i->getTrackName() == userQuery)  //if the track name matches
                 {
-                    i->printRecord();
+                    ++searchResultCount;
+                    top10.push_back(i);
                     found = true;
                 }
             }
+
+            std::sort(top10.begin(), top10.end(), compare);
+
+            totalResult = 0;
+            if (searchResultCount >= 10)
+            {
+                totalResult = 10;
+            } else
+            {
+                totalResult = searchResultCount;
+            }
+            for (int i = 0; i < totalResult; ++i)
+            {
+                std::cout << "Popularity Rank " << top10[i]->getPopularityScore() << ": \n";
+                top10[i]->printRecord();
+                std::cout << "\n";
+            }
+            searchResultCount = 0;
+            totalResult = 0;
+            top10.clear();
+
             break;
         case 2:
             for (auto & i : datasetVector)
             {
                 if (i->getAlbum() == userQuery)  //if the track name matches
                 {
-                    i->printRecord();
+                    ++searchResultCount;
+                    top10.push_back(i);
                     found = true;
                 }
             }
+
+            std::sort(top10.begin(), top10.end(), compare);
+
+            totalResult = 0;
+            if (searchResultCount >= 10)
+            {
+                totalResult = 10;
+            } else
+            {
+                totalResult = searchResultCount;
+            }
+            for (int i = 0; i < totalResult; ++i)
+            {
+                std::cout << "Popularity Rank " << top10[i]->getPopularityScore() << ": \n";
+                top10[i]->printRecord();
+                std::cout << "\n";
+            }
+            searchResultCount = 0;
+            totalResult = 0;
+            top10.clear();
             break;
         case 3:
             for (auto & i : datasetVector)
             {
                 if (i->getArtists() == userQuery)  //if the track name matches
                 {
-                    i->printRecord();
+                    ++searchResultCount;
+                    top10.push_back(i);
                     found = true;
                 }
             }
+
+            std::sort(top10.begin(), top10.end(), compare);
+
+            totalResult = 0;
+            if (searchResultCount >= 10)
+            {
+                totalResult = 10;
+            } else
+            {
+                totalResult = searchResultCount;
+            }
+            for (int i = 0; i < totalResult; ++i)
+            {
+                std::cout << "Popularity Rank " << top10[i]->getPopularityScore() << ": \n";
+                top10[i]->printRecord();
+                std::cout << "\n";
+            }
+            searchResultCount = 0;
+            totalResult = 0;
+            top10.clear();
             break;
     }
 
