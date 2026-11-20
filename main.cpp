@@ -255,7 +255,7 @@ int main()
 
                 //Vector Search
                 millisecondsToRun = vectorSearch(datasetVector, userChoice, userQuery);
-                
+
 
                 std::cout << "\nTime Taken to Find Artist (milliseconds): " << millisecondsToRun << std::endl;
                 break;
