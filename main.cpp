@@ -3,12 +3,13 @@
 #include <chrono>
 #include <unordered_map>
 #include <memory>
-#include <vector>
-#include <algorithm>
 
 #include "Record.h"
+#include "RecordOperations.h"
 
 constexpr int recordCountToRead = 114000;
+
+double vectorSearch(std::vector<Record*> &datasetVector, int userChoice, std::string userQuery);
 
 int main()
 {
@@ -72,36 +73,12 @@ int main()
 
     std::cout << "Time Taken to Read Dataset into Vector (milliseconds): " << millisecondsToRun << std::endl;
 
+    runEditMenu(trackNameDatasetHashMap, albumNameDatasetHashMap, artistNameDatasetHashMap, datasetVector);
+
+
     int userChoice = 0;
     std::string userQuery;
-    std::vector<Record*> matchingRecords;
-    std::cout << "\nMusic Search\n"; 
-
-    auto Top10Records = [](std::vector<Record*>& matchingrecords)
-{
-    if (matchingrecords.size() == 0)
-    {
-        std::cout << "No records found.\n";
-        return;
-    }
-    std::sort(matchingrecords.begin(), matchingrecords.end(), [](Record* song1, Record* song2)
-    {
-        return song1->getPopularityScore() > song2->getPopularityScore();
-    });
-    int topTen = matchingrecords.size();
-    if (topTen > 10)
-    {
-        topTen = 10;
-    }
-    for (int i = 0; i < topTen; ++i)
-    {
-        std::cout << "Top Songs #" << (i + 1) << ":\n";
-        matchingrecords[i]->printRecord();
-
-        std::cout << "Popularity score: "
-                  << matchingrecords[i]->getPopularityScore() << "\n";
-    }
-};
+    std::cout << "\nMusic Search\n";
 
     while (true)
     {
@@ -132,7 +109,6 @@ int main()
                 finishedTime = std::chrono::high_resolution_clock::now();
                 processingTime = finishedTime - startTime;
                 millisecondsToRun = processingTime.count();
-                matchingRecords.clear();
 
                 if (result.first != trackNameDatasetHashMap.end())
                 {
@@ -140,10 +116,8 @@ int main()
 
                     for (auto it = result.first; it != result.second; ++it)
                     {
-                        matchingRecords.push_back(it->second);
+                        it->second->printRecord();
                     }
-
-                    Top10Records(matchingRecords);
                 }
                 else
                 {
@@ -152,25 +126,8 @@ int main()
 
                 std::cout << "\nTime Taken to Find Track (milliseconds): " << millisecondsToRun << std::endl;
 
-
-
-                std::cout << "\n\n\nVector Search:\n";
-
-                startTime = std::chrono::high_resolution_clock::now();
-
-                std::cout << "Tracks found for query \"" << userQuery << "\": \n";
-                matchingRecords.clear();
-                for (int i = 0; i < recordCountToRead; ++i)
-                {
-                    if (datasetVector[i]->getTrackName() == userQuery)
-                    {
-                        matchingRecords.push_back(datasetVector[i]);
-                    }
-                }
-                Top10Records(matchingRecords);
-                finishedTime = std::chrono::high_resolution_clock::now();
-                processingTime = finishedTime - startTime;
-                millisecondsToRun = processingTime.count();
+                //Vector Search
+                millisecondsToRun = vectorSearch(datasetVector, userChoice, userQuery);
 
                 std::cout << "\nTime Taken to Find Track (milliseconds): " << millisecondsToRun << std::endl;
                 break;
@@ -183,16 +140,15 @@ int main()
                 finishedTime = std::chrono::high_resolution_clock::now();
                 processingTime = finishedTime - startTime;
                 millisecondsToRun = processingTime.count();
-                matchingRecords.clear();
+
                 if (result.first != albumNameDatasetHashMap.end())
                 {
                     std::cout << "Track(s) found for query \"" << userQuery << "\": \n";
 
                     for (auto it = result.first; it != result.second; ++it)
                     {
-                        matchingRecords.push_back(it->second);
+                        it->second->printRecord();
                     }
-                    Top10Records(matchingRecords);
                 }
                 else
                 {
@@ -201,26 +157,8 @@ int main()
 
                 std::cout << "\nTime Taken to Find Album (milliseconds): " << millisecondsToRun << std::endl;
 
-
-
-                std::cout << "\n\n\nVector Search:\n";
-
-                startTime = std::chrono::high_resolution_clock::now();
-
-                std::cout << "Tracks under Query found for query \"" << userQuery << "\": \n";
-                matchingRecords.clear();
-                for (int i = 0; i < recordCountToRead; ++i)
-                {
-                    if (datasetVector[i]->getAlbum() == userQuery)
-                    {
-                        matchingRecords.push_back(datasetVector[i]);
-                    }
-                }
-                Top10Records(matchingRecords);
-
-                finishedTime = std::chrono::high_resolution_clock::now();
-                processingTime = finishedTime - startTime;
-                millisecondsToRun = processingTime.count();
+                //Vector Search
+                millisecondsToRun = vectorSearch(datasetVector, userChoice, userQuery);
 
                 std::cout << "\nTime Taken to Find Album (milliseconds): " << millisecondsToRun << std::endl;
                 break;
@@ -233,16 +171,15 @@ int main()
                 finishedTime = std::chrono::high_resolution_clock::now();
                 processingTime = finishedTime - startTime;
                 millisecondsToRun = processingTime.count();
-                matchingRecords.clear();
+
                 if (result.first != artistNameDatasetHashMap.end())
                 {
                     std::cout << "Track(s) found for query \"" << userQuery << "\": \n";
 
                     for (auto it = result.first; it != result.second; ++it)
                     {
-                        matchingRecords.push_back(it->second);
+                        it->second->printRecord();
                     }
-                    Top10Records(matchingRecords);
                 }
                 else
                 {
@@ -251,26 +188,9 @@ int main()
 
                 std::cout << "\nTime Taken to Find Artist (milliseconds): " << millisecondsToRun << std::endl;
 
-
-
-                std::cout << "\n\n\nVector Search:\n";
-
-                startTime = std::chrono::high_resolution_clock::now();
-
-                std::cout << "Tracks found for query \"" << userQuery << "\": \n";
-                matchingRecords.clear();
-                for (int i = 0; i < recordCountToRead; ++i)
-                {
-                    if (datasetVector[i]->getArtists() == userQuery)
-                    {
-                        matchingRecords.push_back(datasetVector[i]);
-                    }
-                }
-                Top10Records(matchingRecords);
-
-                finishedTime = std::chrono::high_resolution_clock::now();
-                processingTime = finishedTime - startTime;
-                millisecondsToRun = processingTime.count();
+                //Vector Search
+                millisecondsToRun = vectorSearch(datasetVector, userChoice, userQuery);
+                
 
                 std::cout << "\nTime Taken to Find Artist (milliseconds): " << millisecondsToRun << std::endl;
                 break;
@@ -282,4 +202,70 @@ int main()
     }
 
     return 0;
+}
+
+//searches the Vector for any records matching what the user puts in
+//takes in the dataset vector, and the user's search input
+//prints the found records to the console and returns the milliseconds taken to find all matching records
+
+double vectorSearch(std::vector<Record*> &datasetVector, int userChoice, std::string userQuery)
+{
+    //time tracking variables
+    double millisecondsToRun;
+    std::chrono::duration<double, std::milli> processingTime{};
+    std::chrono::time_point<std::chrono::high_resolution_clock> startTime = std::chrono::high_resolution_clock::now();
+    bool found = false;
+
+    std::cout << "\n\n\nVector Search:\n";
+    std::cout << "Track(s) found for query \"" << userQuery << "\": \n";
+
+    startTime = std::chrono::high_resolution_clock::now();
+
+    //iterate through the loop, looking for any records that match the user's search
+    switch (userChoice)
+    {
+        case 1:
+            for (auto & i : datasetVector)
+            {
+                if (i->getTrackName() == userQuery)  //if the track name matches
+                {
+                    i->printRecord();
+                    found = true;
+                }
+            }
+            break;
+        case 2:
+            for (auto & i : datasetVector)
+            {
+                if (i->getAlbum() == userQuery)  //if the track name matches
+                {
+                    i->printRecord();
+                    found = true;
+                }
+            }
+            break;
+        case 3:
+            for (auto & i : datasetVector)
+            {
+                if (i->getArtists() == userQuery)  //if the track name matches
+                {
+                    i->printRecord();
+                    found = true;
+                }
+            }
+            break;
+    }
+
+    //calculate the time it took to run
+    std::chrono::time_point<std::chrono::high_resolution_clock> finishedTime = std::chrono::high_resolution_clock::now();
+    processingTime = finishedTime - startTime;
+    millisecondsToRun = processingTime.count();
+
+    if(!found)
+    {
+        std::cout << "No records match that query.\n";
+    }
+
+    //return the time in milliseconds
+    return millisecondsToRun;
 }
