@@ -3,13 +3,17 @@
 #include <chrono>
 #include <unordered_map>
 #include <memory>
+#include <algorithm>
 
 #include "Record.h"
 #include "RecordOperations.h"
 
 constexpr int recordCountToRead = 114000;
 
-double vectorSearch(std::vector<Record*> &datasetVector, int userChoice, std::string userQuery);
+bool compare(Record* first, Record* second);
+double vectorSearch(std::vector<Record*> &datasetVector, int userChoice, const std::string& userQuery);
+
+std::vector<Record*> top10;
 
 int main()
 {
@@ -47,8 +51,6 @@ int main()
     double millisecondsToRun = processingTime.count();
 
     std::cout << "Time Taken to Read Dataset into Hashmap (milliseconds): " << millisecondsToRun << std::endl;
-
-
 
     datasetFile.open("dataset.csv");
     std::getline(datasetFile, firstLine);
@@ -97,6 +99,9 @@ int main()
         std::getline(std::cin, userQuery);
         std::cout << "\n";
 
+        int searchResultCount = 0;
+        int totalResult = 0;
+
         auto result = trackNameDatasetHashMap.equal_range("");
         switch (userChoice)
         {
@@ -116,8 +121,28 @@ int main()
 
                     for (auto it = result.first; it != result.second; ++it)
                     {
-                        it->second->printRecord();
+                        ++searchResultCount;
+                        top10.push_back(it->second);
                     }
+                    std::sort(top10.begin(), top10.end(), compare);
+
+                    totalResult = 0;
+                    if (searchResultCount >= 10)
+                    {
+                        totalResult = 10;
+                    } else
+                    {
+                        totalResult = searchResultCount;
+                    }
+                    for (int i = 0; i < totalResult; ++i)
+                    {
+                        std::cout << "Popularity Rank " << top10[i]->getPopularityScore() << ": \n";
+                        top10[i]->printRecord();
+                        std::cout << "\n";
+                    }
+                    searchResultCount = 0;
+                    totalResult = 0;
+                    top10.clear();
                 }
                 else
                 {
@@ -147,8 +172,28 @@ int main()
 
                     for (auto it = result.first; it != result.second; ++it)
                     {
-                        it->second->printRecord();
+                        ++searchResultCount;
+                        top10.push_back(it->second);
                     }
+                    std::sort(top10.begin(), top10.end(), compare);
+
+                    totalResult = 0;
+                    if (searchResultCount >= 10)
+                    {
+                        totalResult = 10;
+                    } else
+                    {
+                        totalResult = searchResultCount;
+                    }
+                    for (int i = 0; i < totalResult; ++i)
+                    {
+                        std::cout << "Popularity Rank " << top10[i]->getPopularityScore() << ": \n";
+                        top10[i]->printRecord();
+                        std::cout << "\n";
+                    }
+                    searchResultCount = 0;
+                    totalResult = 0;
+                    top10.clear();
                 }
                 else
                 {
@@ -178,8 +223,28 @@ int main()
 
                     for (auto it = result.first; it != result.second; ++it)
                     {
-                        it->second->printRecord();
+                        ++searchResultCount;
+                        top10.push_back(it->second);
                     }
+                    std::sort(top10.begin(), top10.end(), compare);
+
+                    totalResult = 0;
+                    if (searchResultCount >= 10)
+                    {
+                        totalResult = 10;
+                    } else
+                    {
+                        totalResult = searchResultCount;
+                    }
+                    for (int i = 0; i < totalResult; ++i)
+                    {
+                        std::cout << "Popularity Rank " << top10[i]->getPopularityScore() << ": \n";
+                        top10[i]->printRecord();
+                        std::cout << "\n";
+                    }
+                    searchResultCount = 0;
+                    totalResult = 0;
+                    top10.clear();
                 }
                 else
                 {
@@ -204,11 +269,18 @@ int main()
     return 0;
 }
 
+bool compare(Record* first, Record* second)
+{
+    int popOne = first->getPopularityScore();
+    int popTwo = second->getPopularityScore();
+    return popOne > popTwo;
+}
+
 //searches the Vector for any records matching what the user puts in
 //takes in the dataset vector, and the user's search input
 //prints the found records to the console and returns the milliseconds taken to find all matching records
 
-double vectorSearch(std::vector<Record*> &datasetVector, int userChoice, std::string userQuery)
+double vectorSearch(std::vector<Record*> &datasetVector, int userChoice, const std::string& userQuery)
 {
     //time tracking variables
     double millisecondsToRun;
