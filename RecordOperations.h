@@ -16,6 +16,7 @@ struct DeleteResult
 };
 
 
+//Adds new record to all 3 hash tables and to the vector.
 void insertRecord(RecordMap& trackMap,
                   RecordMap& albumMap,
                   RecordMap& artistMap,
@@ -25,7 +26,7 @@ void insertRecord(RecordMap& trackMap,
                   const std::string& track,
                   int popularity);
 
-
+//Deletes every record whose track, album, and artist all match exactly from the hash and the vectors.
 DeleteResult deleteRecord(RecordMap& trackMap,
                           RecordMap& albumMap,
                           RecordMap& artistMap,
@@ -34,14 +35,14 @@ DeleteResult deleteRecord(RecordMap& trackMap,
                           const std::string& album,
                           const std::string& artists);
 
-
+//Deletes every record whose track name matches exactly from the hash and the vectors.
 DeleteResult deleteRecordsByTrackName(RecordMap& trackMap,
                                       RecordMap& albumMap,
                                       RecordMap& artistMap,
                                       std::vector<Record*>& datasetVector,
                                       const std::string& track);
 
-
+//terminal menu to choose insertion/deletion operations
 void runEditMenu(RecordMap& trackMap,
                  RecordMap& albumMap,
                  RecordMap& artistMap,

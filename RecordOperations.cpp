@@ -20,7 +20,7 @@ namespace
         return rec;
     }
 
-
+    //erases only the entry under "key" that points to "rec".
     void eraseFromMap(RecordMap& map, const std::string& key, Record* rec)
     {
         auto range = map.equal_range(key);
@@ -34,7 +34,7 @@ namespace
         }
     }
 
-
+    //Every record with track name "track" that "matches" returns as true is removed from hash and vectors.
     DeleteResult deleteMatching(RecordMap& trackMap,
                                 RecordMap& albumMap,
                                 RecordMap& artistMap,
@@ -44,6 +44,7 @@ namespace
     {
         DeleteResult result;
 
+        //Hash tables
         std::chrono::duration<double, std::milli> processingTime{};
         std::chrono::time_point<std::chrono::high_resolution_clock> startTime = std::chrono::high_resolution_clock::now();
 
@@ -71,7 +72,7 @@ namespace
             ++result.fromHashMaps;
         }
 
-
+        //Vectors
         std::size_t write = 0;
         for (std::size_t read = 0; read < datasetVector.size(); ++read)
         {
@@ -153,7 +154,7 @@ namespace
 {
     constexpr const char* kDatasetPath = "dataset.csv";
 
-
+    //temporarily logs one change until the user decides to save the change.
     struct PendingOp
     {
         enum class Kind { Insert, DeleteExact, DeleteByTrack } kind;
@@ -172,7 +173,7 @@ namespace
         bool parsed {false};
     };
 
-
+    //splits CSV line same way Record::readRecord does.
     std::vector<std::string> splitCsvLine(const std::string& rawLine)
     {
         std::string line = rawLine;
@@ -215,7 +216,7 @@ namespace
         return cols;
     }
 
-
+    //Quotes a field for the CSV output if needed
     std::string csvField(const std::string& s)
     {
         bool alreadyQuoted = s.size() >= 2 && s.front() == '"' && s.back() == '"';
@@ -234,7 +235,9 @@ namespace
         return out;
     }
 
-
+    //Places the logged changes onto dataset.csv.
+    //Every row that isn't deleted keeps all of its original columns
+    //Makes a backup file.
     bool saveChanges(const std::vector<PendingOp>& ops)
     {
         namespace fs = std::filesystem;
