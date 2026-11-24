@@ -8,36 +8,49 @@
 #include "Record.h"
 #include "RecordOperations.h"
 
+// global for the record count
 int recordCountToRead = 114000;
 
+// function declarations
 bool compare(Record* first, Record* second);
 double vectorSearch(std::vector<Record*> &datasetVector, int userChoice, const std::string& userQuery);
 
+// global variables to facilitate proper printing in vector search and main
 std::vector<Record*> top10;
-
 int searchResultCount = 0;
 int totalResult = 0;
 
 int main(int argc, char** argv)
 {
-    recordCountToRead = atoi(argv[1]);
+    // check that an argument is provided. If it is, use that value instead
+    if (argv[1] != nullptr)
+    {
+        recordCountToRead = atoi(argv[1]);
+    }
+
+    // 3 multimaps for the individually searchable bits of data
     std::unordered_multimap<std::string, Record*> trackNameDatasetHashMap;
     std::unordered_multimap<std::string, Record*> albumNameDatasetHashMap;
     std::unordered_multimap<std::string, Record*> artistNameDatasetHashMap;
 
+    // vector counterpart
     std::vector<Record*> datasetVector;
 
+    // open dataset
     std::ifstream datasetFile;
     datasetFile.open("dataset.csv");
 
+    // ignore first line of headers
     std::string firstLine;
     std::getline(datasetFile, firstLine);
 
     int datasetIndex = 0;
 
+    // initialize variables to record the first time point
     std::chrono::duration<double, std::milli> processingTime{};
     std::chrono::time_point<std::chrono::high_resolution_clock> startTime = std::chrono::high_resolution_clock::now();
 
+    // read each dataset record into the hashmaps and close the file
     while (datasetIndex < recordCountToRead)
     {
         auto* rec = new Record;
@@ -50,12 +63,14 @@ int main(int argc, char** argv)
 
     datasetFile.close();
 
+    // find total time and print
     std::chrono::time_point<std::chrono::high_resolution_clock> finishedTime = std::chrono::high_resolution_clock::now();
     processingTime = finishedTime - startTime;
     double millisecondsToRun = processingTime.count();
 
     std::cout << "Time Taken to Read Dataset into Hashmap (milliseconds): " << millisecondsToRun << std::endl;
 
+    // repeat for the vector object
     datasetFile.open("dataset.csv");
     std::getline(datasetFile, firstLine);
 
@@ -79,36 +94,41 @@ int main(int argc, char** argv)
 
     std::cout << "Time Taken to Read Dataset into Vector (milliseconds): " << millisecondsToRun << std::endl;
 
+    // run edit menu to allow inserting or deleting records
     runEditMenu(trackNameDatasetHashMap, albumNameDatasetHashMap, artistNameDatasetHashMap, datasetVector);
 
 
+    // poll user
     int userChoice = 0;
     std::string userQuery;
     std::cout << "\nMusic Search\n";
 
     while (true)
     {
+        // input preface loop
         std::cout << "Select search value type:\n(1) Track Name\n(2) Album Name\n(3) Artist Name\n(4) Exit Program: ";
         std::cin >> userChoice;
         std::cin.ignore();
 
+        // exit condition
         if (userChoice == 4)
         {
             std::cout << "Exiting..." << std::endl;
             break;
         }
 
+        // get the string to search the hashmaps with
         std::cout << "Enter query: ";
 
         std::getline(std::cin, userQuery);
         std::cout << "\n";
 
-
-
+        // blank assignment of result for later use
         auto result = trackNameDatasetHashMap.equal_range("");
         switch (userChoice)
         {
             case 1:
+                // begin search
                 std::cout << "Hashmap Search:\n";
                 startTime = std::chrono::high_resolution_clock::now();
 
@@ -118,6 +138,7 @@ int main(int argc, char** argv)
                 processingTime = finishedTime - startTime;
                 millisecondsToRun = processingTime.count();
 
+                // push all found tracks into top10 array
                 if (result.first != trackNameDatasetHashMap.end())
                 {
                     std::cout << "Track(s) found for query \"" << userQuery << "\": \n";
@@ -127,8 +148,10 @@ int main(int argc, char** argv)
                         ++searchResultCount;
                         top10.push_back(it->second);
                     }
+                    // sort by popularity
                     std::sort(top10.begin(), top10.end(), compare);
 
+                    // bounds check the totalResult count
                     totalResult = 0;
                     if (searchResultCount >= 10)
                     {
@@ -137,12 +160,14 @@ int main(int argc, char** argv)
                     {
                         totalResult = searchResultCount;
                     }
+                    // print top 10 results
                     for (int i = 0; i < totalResult; ++i)
                     {
                         std::cout << "Popularity Rank " << top10[i]->getPopularityScore() << ": \n";
                         top10[i]->printRecord();
                         std::cout << "\n";
                     }
+                    // zero and flush
                     searchResultCount = 0;
                     totalResult = 0;
                     top10.clear();
@@ -160,6 +185,7 @@ int main(int argc, char** argv)
                 std::cout << "\nTime Taken to Find Track (milliseconds): " << millisecondsToRun << std::endl;
                 break;
             case 2:
+                // begin search
                 std::cout << "Hashmap Search:\n";
                 startTime = std::chrono::high_resolution_clock::now();
 
@@ -169,6 +195,7 @@ int main(int argc, char** argv)
                 processingTime = finishedTime - startTime;
                 millisecondsToRun = processingTime.count();
 
+                // push all found tracks into top10 array
                 if (result.first != albumNameDatasetHashMap.end())
                 {
                     std::cout << "Track(s) found for query \"" << userQuery << "\": \n";
@@ -178,8 +205,10 @@ int main(int argc, char** argv)
                         ++searchResultCount;
                         top10.push_back(it->second);
                     }
+                    // sort by popularity
                     std::sort(top10.begin(), top10.end(), compare);
 
+                    // bounds check the totalResult count
                     totalResult = 0;
                     if (searchResultCount >= 10)
                     {
@@ -188,12 +217,15 @@ int main(int argc, char** argv)
                     {
                         totalResult = searchResultCount;
                     }
+                    // print top 10 results
                     for (int i = 0; i < totalResult; ++i)
                     {
                         std::cout << "Popularity Rank " << top10[i]->getPopularityScore() << ": \n";
                         top10[i]->printRecord();
                         std::cout << "\n";
                     }
+
+                    // zero and flush
                     searchResultCount = 0;
                     totalResult = 0;
                     top10.clear();
@@ -211,6 +243,7 @@ int main(int argc, char** argv)
                 std::cout << "\nTime Taken to Find Album (milliseconds): " << millisecondsToRun << std::endl;
                 break;
             case 3:
+                // begin search
                 std::cout << "Hashmap Search:\n";
                 startTime = std::chrono::high_resolution_clock::now();
 
@@ -220,6 +253,7 @@ int main(int argc, char** argv)
                 processingTime = finishedTime - startTime;
                 millisecondsToRun = processingTime.count();
 
+                // push all found tracks into top10 array
                 if (result.first != artistNameDatasetHashMap.end())
                 {
                     std::cout << "Track(s) found for query \"" << userQuery << "\": \n";
@@ -229,8 +263,10 @@ int main(int argc, char** argv)
                         ++searchResultCount;
                         top10.push_back(it->second);
                     }
+                    // sort by popularity
                     std::sort(top10.begin(), top10.end(), compare);
 
+                    // bounds check the totalResult count
                     totalResult = 0;
                     if (searchResultCount >= 10)
                     {
@@ -239,12 +275,14 @@ int main(int argc, char** argv)
                     {
                         totalResult = searchResultCount;
                     }
+                    // print top 10 results
                     for (int i = 0; i < totalResult; ++i)
                     {
                         std::cout << "Popularity Rank " << top10[i]->getPopularityScore() << ": \n";
                         top10[i]->printRecord();
                         std::cout << "\n";
                     }
+                    // zero and flush
                     searchResultCount = 0;
                     totalResult = 0;
                     top10.clear();
@@ -274,6 +312,7 @@ int main(int argc, char** argv)
 
 bool compare(Record* first, Record* second)
 {
+    // function to sort vector by popularity
     int popOne = first->getPopularityScore();
     int popTwo = second->getPopularityScore();
     return popOne > popTwo;
@@ -300,6 +339,8 @@ double vectorSearch(std::vector<Record*> &datasetVector, int userChoice, const s
     switch (userChoice)
     {
         case 1:
+            // begin search
+            // push all found tracks into top10 array
             for (auto & i : datasetVector)
             {
                 if (i->getTrackName() == userQuery)  //if the track name matches
@@ -310,8 +351,10 @@ double vectorSearch(std::vector<Record*> &datasetVector, int userChoice, const s
                 }
             }
 
+            // sort by popularity
             std::sort(top10.begin(), top10.end(), compare);
 
+            // bounds check the totalResult count
             totalResult = 0;
             if (searchResultCount >= 10)
             {
@@ -320,18 +363,24 @@ double vectorSearch(std::vector<Record*> &datasetVector, int userChoice, const s
             {
                 totalResult = searchResultCount;
             }
+
+            // print top 10 results
             for (int i = 0; i < totalResult; ++i)
             {
                 std::cout << "Popularity Rank " << top10[i]->getPopularityScore() << ": \n";
                 top10[i]->printRecord();
                 std::cout << "\n";
             }
+
+            // zero and flush
             searchResultCount = 0;
             totalResult = 0;
             top10.clear();
 
             break;
         case 2:
+            // begin search
+            // push all found tracks into top10 array
             for (auto & i : datasetVector)
             {
                 if (i->getAlbum() == userQuery)  //if the track name matches
@@ -341,9 +390,10 @@ double vectorSearch(std::vector<Record*> &datasetVector, int userChoice, const s
                     found = true;
                 }
             }
-
+            // sort by popularity
             std::sort(top10.begin(), top10.end(), compare);
 
+            // bounds check the totalResult count
             totalResult = 0;
             if (searchResultCount >= 10)
             {
@@ -352,17 +402,21 @@ double vectorSearch(std::vector<Record*> &datasetVector, int userChoice, const s
             {
                 totalResult = searchResultCount;
             }
+            // print top 10 results
             for (int i = 0; i < totalResult; ++i)
             {
                 std::cout << "Popularity Rank " << top10[i]->getPopularityScore() << ": \n";
                 top10[i]->printRecord();
                 std::cout << "\n";
             }
+            // zero and flush
             searchResultCount = 0;
             totalResult = 0;
             top10.clear();
             break;
         case 3:
+            // begin search
+            // push all found tracks into top10 array
             for (auto & i : datasetVector)
             {
                 if (i->getArtists() == userQuery)  //if the track name matches
@@ -373,8 +427,10 @@ double vectorSearch(std::vector<Record*> &datasetVector, int userChoice, const s
                 }
             }
 
+            // sort by popularity
             std::sort(top10.begin(), top10.end(), compare);
 
+            // bounds check the totalResult count
             totalResult = 0;
             if (searchResultCount >= 10)
             {
@@ -383,12 +439,14 @@ double vectorSearch(std::vector<Record*> &datasetVector, int userChoice, const s
             {
                 totalResult = searchResultCount;
             }
+            // print top 10 results
             for (int i = 0; i < totalResult; ++i)
             {
                 std::cout << "Popularity Rank " << top10[i]->getPopularityScore() << ": \n";
                 top10[i]->printRecord();
                 std::cout << "\n";
             }
+            // zero and flush
             searchResultCount = 0;
             totalResult = 0;
             top10.clear();

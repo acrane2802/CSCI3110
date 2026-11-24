@@ -26,34 +26,11 @@ public:
     void setPopularityScore(const int& score);
 
 private:
-    /* int number {0};
-
-    std::string trackID; */
     std::string artists;
     std::string albumName;
     std::string trackName;
 
     int popularity {0};
-    /* int durationInMS {0};
-    bool isExplicit {false};
-
-    float danceability {0.0f};
-    float energy {0.0f};
-    int key {0};
-
-    float loudness {0.0f};
-    int mode {0};
-    float speechiness {0.0f};
-    float acousticness {0.0f};
-    float instrumentalness {0.0f};
-    float liveliness {0.0f};
-
-    float valence {0.0f};
-
-    float tempo {0.0f};
-    float timeSignature {0.0f};
-
-    std::string genre; */
 
     std::vector<std::string> substrings;
 };

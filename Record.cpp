@@ -12,7 +12,7 @@ void Record::readRecord(std::ifstream &file)
     {
         line.pop_back();
     }
-
+    // parse csv line
     std::string currentCSVColumn;
     bool inQuotes = false;
 
@@ -44,49 +44,21 @@ void Record::readRecord(std::ifstream &file)
         }
     }
 
+    // store all substrings into variables
     substrings.push_back(currentCSVColumn);
 
-    /* number = stoi(substrings[0]);
-
-    trackID = substrings[1]; */
     artists = substrings[2];
     albumName = substrings[3];
     trackName = substrings[4];
 
     popularity = stoi(substrings[5]);
-    /* durationInMS = stoi(substrings[6]);
-
-    if (substrings[7] == "true")
-    {
-        isExplicit = true;
-    } else
-    {
-        isExplicit = false;
-    }
-
-    danceability = stof(substrings[8]);
-    energy = stof(substrings[9]);
-    key = stoi(substrings[10]);
-
-    loudness = stof(substrings[11]);
-    mode = stoi(substrings[12]);
-    speechiness = stof(substrings[13]);
-    acousticness = stof(substrings[14]);
-    instrumentalness = stof(substrings[15]);
-    liveliness = stof(substrings[16]);
-
-    valence = stof(substrings[17]);
-
-    tempo = stof(substrings[18]);
-    timeSignature = stof(substrings[19]);
-
-    genre = substrings[20]; */
 
     substrings.clear();
 }
 
 void Record::printRecord()
 {
+    // print record
     std::cout << "Artist(s): " << artists << "\n" << "Album Name: " << albumName << "\n" << "Track Name: " << trackName << "\n";
 }
 
