@@ -22,6 +22,7 @@ int totalResult = 0;
 
 int main(int argc, char** argv)
 {
+    argc *= 1;
     // check that an argument is provided. If it is, use that value instead
     if (argv[1] != nullptr)
     {
