@@ -44,6 +44,8 @@ namespace
     {
         DeleteResult result;
 
+        std::chrono::duration<double, std::milli> processingTime{};
+        std::chrono::time_point<std::chrono::high_resolution_clock> startTime = std::chrono::high_resolution_clock::now();
 
         std::vector<Record*> toDelete;
         auto range = trackMap.equal_range(track);
@@ -86,6 +88,12 @@ namespace
         }
         datasetVector.resize(write);
 
+        std::chrono::time_point<std::chrono::high_resolution_clock> finishedTime = std::chrono::high_resolution_clock::now();
+        processingTime = finishedTime - startTime;
+        double millisecondsToRun = processingTime.count();
+
+        std::cout << "Time Taken to Delete Record (milliseconds): " << millisecondsToRun << std::endl;
+
         return result;
     }
 }
@@ -99,12 +107,21 @@ void insertRecord(RecordMap& trackMap,
                   const std::string& track,
                   int popularity)
 {
+    std::chrono::duration<double, std::milli> processingTime{};
+    std::chrono::time_point<std::chrono::high_resolution_clock> startTime = std::chrono::high_resolution_clock::now();
+
     Record* hashRec = makeRecord(artists, album, track, popularity);
     trackMap.insert(std::pair(hashRec->getTrackName(), hashRec));
     albumMap.insert(std::pair(hashRec->getAlbum(), hashRec));
     artistMap.insert(std::pair(hashRec->getArtists(), hashRec));
 
     datasetVector.push_back(makeRecord(artists, album, track, popularity));
+
+    std::chrono::time_point<std::chrono::high_resolution_clock> finishedTime = std::chrono::high_resolution_clock::now();
+    processingTime = finishedTime - startTime;
+    double millisecondsToRun = processingTime.count();
+
+    std::cout << "Time Taken to Insert Record (milliseconds): " << millisecondsToRun << std::endl;
 }
 
 DeleteResult deleteRecord(RecordMap& trackMap,
