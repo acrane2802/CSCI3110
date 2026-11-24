@@ -8,7 +8,7 @@
 #include "Record.h"
 #include "RecordOperations.h"
 
-constexpr int recordCountToRead = 114000;
+int recordCountToRead = 114000;
 
 bool compare(Record* first, Record* second);
 double vectorSearch(std::vector<Record*> &datasetVector, int userChoice, const std::string& userQuery);
@@ -18,8 +18,9 @@ std::vector<Record*> top10;
 int searchResultCount = 0;
 int totalResult = 0;
 
-int main()
+int main(int argc, char** argv)
 {
+    recordCountToRead = atoi(argv[1]);
     std::unordered_multimap<std::string, Record*> trackNameDatasetHashMap;
     std::unordered_multimap<std::string, Record*> albumNameDatasetHashMap;
     std::unordered_multimap<std::string, Record*> artistNameDatasetHashMap;
