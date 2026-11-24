@@ -1,3 +1,10 @@
+// AI Disclaimer: A.I. DISCLAIMER: ALL WORK FOR THIS ASSIGNMENT WAS COMPLETED BY
+// MYSELF AND ENTIRELY WITHOUT THE USE OF ARTIFICIAL INTELLIGENCE TOOLS
+// SUCH AS CHATGPT, MS COPILOT, OTHER LLMS, ETC
+
+// Authors: Andrew Crane, Alexis Mann, Vixen Martin, Cesar Arteaga
+// Project Description: This reads a list of the most popular songs from a dataset and then provides user options to search through it as well as add or delete records
+
 #include <iostream>
 #include <fstream>
 #include <chrono>
